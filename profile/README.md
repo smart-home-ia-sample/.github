@@ -13,14 +13,10 @@ through **MCP**, and streams the result back to the browser over **AG-UI**.
 <p align="center"><img src="./demo.gif" alt="Smart Home AI demo" width="800"></p>
 -->
 
-```
- Browser ──► sh-bff (Java · JWT · H2/Postgres · MQTT) ──► sh-orchestrator (LangGraph)
-   ▲              │                                            │  resolve
-   │ SPA          │ MQTT                                       ▼
- sh-frontend   Mosquitto ◄── sh-device-sim               sh-bfa (BM25 catalog)
-                                                              │  A2A
-                       sh-mcp ◄── security · environment · energy agents
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./architecture-dark.png">
+  <img src="./architecture-light.png" alt="Smart Home AI architecture: the browser talks to sh-bff, which proxies AG-UI to the LangGraph orchestrator; the orchestrator resolves agents via sh-bfa and calls the A2A agents, which act on devices through sh-mcp, the BFF and MQTT.">
+</picture>
 
 ## Try it
 
