@@ -1,10 +1,17 @@
 # Smart Home AI 🏠🤖
 
+> **Portfolio / reference project** — a working sample built to explore
+> multi-agent architectures and open agent protocols. Not a production product.
+
 A multi-agent smart-home assistant, built as a **polyglot, polyrepo** reference
-architecture. Ask it in natural language — *"lock everything and turn off what
-isn't needed"* — and a LangGraph orchestrator discovers the right agents,
-dispatches the work over **A2A**, acts on devices through **MCP**, and streams
-the result back to the browser over **AG-UI**.
+architecture. Ask it in natural language — *"tranca tudo e desliga o que não
+for necessário"* (commands are in Portuguese) — and a LangGraph orchestrator
+discovers the right agents, dispatches the work over **A2A**, acts on devices
+through **MCP**, and streams the result back to the browser over **AG-UI**.
+
+<!-- TODO: add a screenshot or GIF of the Dashboard + assistant chat here, e.g.
+<p align="center"><img src="./demo.gif" alt="Smart Home AI demo" width="800"></p>
+-->
 
 ```
  Browser ──► sh-bff (Java · JWT · H2/Postgres · MQTT) ──► sh-orchestrator (LangGraph)
@@ -22,6 +29,11 @@ git clone https://github.com/smart-home-ia-sample/sh-infra && cd sh-infra
 docker compose up -d
 # http://localhost:8080   (demo / demo)
 ```
+
+**No API key needed.** By default (`LLM_PROVIDER=mock`) commands are
+interpreted deterministically, without an LLM. For a real model, run one locally
+with Ollama (`LLM_PROVIDER=ollama`, default `llama3.1:8b`, pulled automatically)
+or use Gemini (`LLM_PROVIDER=google`).
 
 Images are published to `ghcr.io/smart-home-ia-sample/sh-*` from each repo's CI.
 
@@ -41,9 +53,25 @@ Images are published to `ghcr.io/smart-home-ia-sample/sh-*` from each repo's CI.
 | [sh-device-sim](https://github.com/smart-home-ia-sample/sh-device-sim) | Python / MQTT | Simulated devices that self-announce their capabilities |
 | [sh-common](https://github.com/smart-home-ia-sample/sh-common) | Python lib | Shared logging, tracing, auth, A2A and MCP clients |
 
+## Documentation
+
+- [Architecture overview](https://github.com/smart-home-ia-sample/sh-infra/blob/main/ARCHITECTURE.md)
+- [Design specs](https://github.com/smart-home-ia-sample/sh-infra/tree/main/spec) — 14 numbered specs, from requirements to catalog-first discovery
+- [Architecture & testing notes](https://github.com/smart-home-ia-sample/sh-infra/tree/main/docs)
+
 ## Highlights
 
 - **Open agent protocols end to end** — A2A between agents, MCP for tools, AG-UI to the browser.
 - **Catalog-first discovery** — agents and tools are found by meaning, not hard-coded routes.
 - **Self-describing devices** — each device announces what it can do over MQTT; the system adapts.
 - **Independent repos, one stack** — every service has its own CI (tests + coverage gate, CodeQL, image publish).
+
+## Contributing
+
+Issues and pull requests are welcome — see the
+[contributing guide](https://github.com/smart-home-ia-sample/.github/blob/main/CONTRIBUTING.md)
+and the [security policy](https://github.com/smart-home-ia-sample/.github/blob/main/SECURITY.md).
+
+---
+
+Released under the [MIT License](https://github.com/smart-home-ia-sample/.github/blob/main/LICENSE).

@@ -1,0 +1,57 @@
+name: Bug report
+description: Something isn't working as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! For security issues, **don't** use this form — see SECURITY.md.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. docker compose up -d
+        2. Log in as demo / demo
+        3. Send "tranca tudo" in the assistant
+        4. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: run-mode
+    attributes:
+      label: How are you running the stack?
+      options:
+        - Published images (docker compose up)
+        - Built from checkouts (+ docker-compose.build.yml)
+        - Fully offline (+ docker-compose.local.yml)
+        - Single service, outside compose
+    validations:
+      required: true
+  - type: dropdown
+    id: llm
+    attributes:
+      label: LLM provider
+      options:
+        - mock (default)
+        - ollama
+        - google
+        - not relevant
+  - type: input
+    id: version
+    attributes:
+      label: Commit / image tag
+      placeholder: e.g. main @ abc1234, or ghcr.io/smart-home-ia-sample/sh-bff:latest
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Include the correlation id if you have one — it ties log lines together across services.
+      render: shell
