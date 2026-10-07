@@ -1,0 +1,49 @@
+# Smart Home AI 🏠🤖
+
+A multi-agent smart-home assistant, built as a **polyglot, polyrepo** reference
+architecture. Ask it in natural language — *"lock everything and turn off what
+isn't needed"* — and a LangGraph orchestrator discovers the right agents,
+dispatches the work over **A2A**, acts on devices through **MCP**, and streams
+the result back to the browser over **AG-UI**.
+
+```
+ Browser ──► sh-bff (Java · JWT · H2/Postgres · MQTT) ──► sh-orchestrator (LangGraph)
+   ▲              │                                            │  resolve
+   │ SPA          │ MQTT                                       ▼
+ sh-frontend   Mosquitto ◄── sh-device-sim               sh-bfa (BM25 catalog)
+                                                              │  A2A
+                       sh-mcp ◄── security · environment · energy agents
+```
+
+## Try it
+
+```sh
+git clone https://github.com/smart-home-ia-sample/sh-infra && cd sh-infra
+docker compose up -d
+# http://localhost:8080   (demo / demo)
+```
+
+Images are published to `ghcr.io/smart-home-ia-sample/sh-*` from each repo's CI.
+
+## Repositories
+
+| Repo | Stack | Role |
+| --- | --- | --- |
+| [**sh-infra**](https://github.com/smart-home-ia-sample/sh-infra) | Docker Compose | Start here — full stack, architecture, specs, end-to-end tests |
+| [sh-frontend](https://github.com/smart-home-ia-sample/sh-frontend) | React 19 + Vite | Dashboard + AG-UI assistant chat |
+| [sh-bff](https://github.com/smart-home-ia-sample/sh-bff) | Java / Spring Boot | Edge gateway: SPA, JWT auth, home/device persistence, MQTT read-model, proxy to the AI layer |
+| [sh-orchestrator](https://github.com/smart-home-ia-sample/sh-orchestrator) | Python / LangGraph | Interpret → discover → dispatch (A2A) → validate → stream AG-UI |
+| [sh-bfa](https://github.com/smart-home-ia-sample/sh-bfa) | Python / FastAPI | Backend-for-Agents: stateless capability catalog + BM25 semantic resolver |
+| [sh-agent-security](https://github.com/smart-home-ia-sample/sh-agent-security) | Python / A2A | Locks, alarm, `secure_home` |
+| [sh-agent-environment](https://github.com/smart-home-ia-sample/sh-agent-environment) | Python / A2A | Lights, climate, blinds, `switch_off_nonessential` |
+| [sh-agent-energy](https://github.com/smart-home-ia-sample/sh-agent-energy) | Python / A2A | Consumption analysis, critical devices |
+| [sh-mcp](https://github.com/smart-home-ia-sample/sh-mcp) | Python / MCP | Generic device-verb tools + `home://*` resources over the BFF |
+| [sh-device-sim](https://github.com/smart-home-ia-sample/sh-device-sim) | Python / MQTT | Simulated devices that self-announce their capabilities |
+| [sh-common](https://github.com/smart-home-ia-sample/sh-common) | Python lib | Shared logging, tracing, auth, A2A and MCP clients |
+
+## Highlights
+
+- **Open agent protocols end to end** — A2A between agents, MCP for tools, AG-UI to the browser.
+- **Catalog-first discovery** — agents and tools are found by meaning, not hard-coded routes.
+- **Self-describing devices** — each device announces what it can do over MQTT; the system adapts.
+- **Independent repos, one stack** — every service has its own CI (tests + coverage gate, CodeQL, image publish).
